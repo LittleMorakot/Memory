@@ -1,8 +1,9 @@
+var path = require('path');
+
 module.exports = {
     entry: './index.tsx',
     output: {
         filename: 'bundle.js', 
-        // path: ''
     },
     resolve: {
         extensions: [".ts", ".tsx", ".js"],
@@ -10,7 +11,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.jsx?$/,
+                test: /\.(js|jsx)?$/,
                 exclude: /node_modules/,
                 use: {
                 loader: 'babel-loader',
@@ -20,7 +21,7 @@ module.exports = {
                 }
             },
             {
-                test: /\.tsx?$/,
+                test: /\.(ts|tsx)?$/,
                 loader: "ts-loader"
             },
             {
@@ -38,5 +39,7 @@ module.exports = {
 
     performance: {
         hints: false
-    }
+    },
+
+    devtool: 'cheap-module-inline-source-map',
 }
