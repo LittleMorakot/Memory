@@ -6,11 +6,13 @@ import { GameState } from '../state';
 import glDebugBox = require('./debug/box');
 import glDebugTriangle = require('./debug/triangle');
 import glDebugPoint = require('./debug/point');
+import glDebugNoisePoint = require('./debug/noisePoint');
 
 export = function (regl, loader:REGLLoader) {
     const drawDebugBox = loader.require(glDebugBox);
     const drawDebugTriangle = loader.require(glDebugTriangle);
     const drawDebugPoint = loader.require(glDebugPoint);
+    const drawDebugNoisePoint = loader.require(glDebugNoisePoint);
 
     const modelMatrix = mat4.identity(mat4.create());
 
@@ -46,6 +48,8 @@ export = function (regl, loader:REGLLoader) {
             drawDebugPoint(vec3.fromValues(1, 0, 0), undefined, vec3.fromValues(1, 0, 0));
             drawDebugPoint(vec3.fromValues(0, 1, 0), undefined, vec3.fromValues(0, 1, 0));
             drawDebugPoint(vec3.fromValues(0, 0, 1), undefined, vec3.fromValues(0, 0, 1));
+
+            drawDebugNoisePoint();
         });
     }
 

@@ -11,11 +11,11 @@ const scratchMat4 = mat4.create();
 
 const UP = vec3.fromValues(0, 1, 0);
 
-const SPEED = 0.2;
+const SPEED = 0.01;
 const MOUSE_SENSITIVITY = 5;
 
 const DEFAULT_FOV_Y = Math.PI / 4;
-const DEFAULT_Z_NEAR = 0.25;
+const DEFAULT_Z_NEAR = 0.00001;
 const DEFAULT_Z_FAR = 512;
 const DEFAULT_GAMMA = 2.2;
 const DEFAULT_DISTANCE = 10.2;
@@ -170,7 +170,7 @@ export class GLCamera {
 
         mat4.mul(viewProjection, projection, view);
         mat4.invert(invViewProjection, viewProjection);
-        this.frustum.setMatrix(viewProjection, invViewProjection);
+        // this.frustum.setMatrix(viewProjection, invViewProjection);
     }
 
     public reset () {
