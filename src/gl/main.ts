@@ -7,12 +7,14 @@ import glDebugBox = require('./debug/box');
 import glDebugTriangle = require('./debug/triangle');
 import glDebugPoint = require('./debug/point');
 import glDebugNoisePoint = require('./debug/noisePoint');
+import glSky = require('./skybox');
 
 export = function (regl, loader:REGLLoader) {
     const drawDebugBox = loader.require(glDebugBox);
     const drawDebugTriangle = loader.require(glDebugTriangle);
     const drawDebugPoint = loader.require(glDebugPoint);
     const drawDebugNoisePoint = loader.require(glDebugNoisePoint);
+    const drawSky = loader.require(glSky);
 
     const modelMatrix = mat4.identity(mat4.create());
 
@@ -38,6 +40,7 @@ export = function (regl, loader:REGLLoader) {
             regl.clear({
                 depth: 1,
             });
+            drawSky.sky();
             // drawDebugTriangle();
             drawDebugBox({
                 bounds: [[0, 0, 0], [1, 1, 1]],

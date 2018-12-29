@@ -1,46 +1,81 @@
-import { vec3 } from 'gl-matrix';
+import { vec3, mat4 } from 'gl-matrix';
+import { hsv2rgb } from '../../utils/hsv2rgb';
+// const noiseVert = require('../glsl/test.glsl');
 
 const DEFAULT_COLOR = vec3.set(vec3.create(), 0, 0, 0);
+const POINT_AMOUNT = 1e4;
+const VERT_SIZE = 4 * (4 + 4 + 3);
 
 export = function (regl) {
+
+    const pointBuffer = regl.buffer(Array(POINT_AMOUNT).fill(0).map(() => {
+        const color = hsv2rgb(Math.random() * 360, 0.6, 1);
+        return [
+            // freq
+            Math.random() * 10,
+            Math.random() * 10,
+            Math.random() * 10,
+            Math.random() * 10,
+            // phase
+            2.0 * Math.PI * Math.random(),
+            2.0 * Math.PI * Math.random(),
+            2.0 * Math.PI * Math.random(),
+            2.0 * Math.PI * Math.random(),
+            // color
+            color[0] / 255, color[1] / 255, color[2] / 255,
+        ];
+    }));
+
     const drawPoint = regl({
         frag: `
-        precision mediump float;
-        uniform lowp vec3 color;
-        void main () {
-            if (length(gl_PointCoord.xy - 0.5) > 0.45) {
+        precision lowp float;
+        varying vec3 fragColor;
+        void main() {
+            if (length(gl_PointCoord.xy - 0.5) > 0.5) {
                 discard;
             }
-            gl_FragColor = vec4(color, 1);
+            gl_FragColor = vec4(fragColor, 1);
         }`,
 
         vert: `
         precision mediump float;
-        uniform mat4 projection, view;
-        // attribute float p;
-        uniform float radius;
-
-        float rand(vec2 co){
-            return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-        }
-
-        void main () {
-            float x = rand(vec2(0.1, 0.1));
-            float y = rand(vec2(0.2, 0.2));
-            float z = rand(vec2(0.3, 0.3));
-
-            gl_PointSize = radius;
-            gl_Position = projection * view * vec4(x, y, z, 1);
+        attribute vec4 freq, phase;
+        attribute vec3 color;
+        uniform float time;
+        uniform mat4 view, projection;
+        varying vec3 fragColor;
+        void main() {
+            vec3 position = .5 * cos(freq.xyz * time + phase.xyz) + vec3(.5);
+            gl_PointSize = 5.0 * (1.0 + cos(freq.w * time + phase.w));
+            gl_Position = projection * view * vec4(position, 1);
+            fragColor = color;
         }`,
 
-        uniforms: {
-            'radius': ({ pixelRatio }, { radius }) => pixelRatio * radius,
-            'color': regl.prop('color'),
-        },
+        attributes: {
+            freq: {
+              buffer: pointBuffer,
+              stride: VERT_SIZE,
+              offset: 0,
+            },
+            phase: {
+              buffer: pointBuffer,
+              stride: VERT_SIZE,
+              offset: 16,
+            },
+            color: {
+              buffer: pointBuffer,
+              stride: VERT_SIZE,
+              offset: 32,
+            },
+          },
 
-        count: 100,
+          uniforms: {
+            // time: ({tick}) => tick * 0.001,
+            time: 0.001,
+          },
+
+        count: POINT_AMOUNT,
         primitive: 'points',
-        offset: 0,
     });
 
     return function (radius?:number, color?:vec3) {
