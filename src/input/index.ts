@@ -24,9 +24,9 @@ export class GameInput {
     }
 
     private _bindEvent() {
-        document.addEventListener('mousedown', this.handleMouseDown.bind(this), true);
-        document.addEventListener('mousemove', this.handleMouseMove.bind(this), true);
-        document.addEventListener('mouseup', this.handleMouseUp.bind(this), true);
+        this._canvas.addEventListener('mousedown', this.handleMouseDown.bind(this), true);
+        this._canvas.addEventListener('mousemove', this.handleMouseMove.bind(this), true);
+        this._canvas.addEventListener('mouseup', this.handleMouseUp.bind(this), true);
 
         document.addEventListener('keydown', this.handleKeyDown.bind(this), true);
         document.addEventListener('keyup', this.handleKeyUp.bind(this), true);
@@ -35,9 +35,9 @@ export class GameInput {
     }
 
     private _unBingEvent() {
-        document.removeEventListener('mousedown', this.handleMouseDown.bind(this), true);
-        document.removeEventListener('mousemove', this.handleMouseMove.bind(this), true);
-        document.removeEventListener('mouseup', this.handleMouseUp.bind(this), true);
+        this._canvas.removeEventListener('mousedown', this.handleMouseDown.bind(this), true);
+        this._canvas.removeEventListener('mousemove', this.handleMouseMove.bind(this), true);
+        this._canvas.removeEventListener('mouseup', this.handleMouseUp.bind(this), true);
 
         document.removeEventListener('keydown', this.handleKeyDown.bind(this), true);
         document.removeEventListener('keyup', this.handleKeyUp.bind(this), true);

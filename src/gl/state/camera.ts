@@ -113,10 +113,10 @@ export class GLCamera {
             this.exposureSamples[i] = 0;
         }
         this.canvas = spec.regl._gl.canvas;
-        this.cameraPos = vec3.create();
+        this.cameraPos = vec3.fromValues(3, 2, 2);
         this.cameraAxis = {
-            yaw: 0,
-            pitch: 0,
+            yaw: 0.49,
+            pitch: 0.52,
         };
         this.reset();
     }

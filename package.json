@@ -15,9 +15,11 @@
   "author": "liuxuefei",
   "license": "MIT",
   "dependencies": {
+    "@types/dat.gui": "^0.7.2",
     "@types/gl-matrix": "^2.4.4",
     "@types/react-css-modules": "^4.6.2",
     "css-loader": "^1.0.1",
+    "dat.gui": "^0.7.3",
     "gl-matrix": "^2.8.1",
     "global": "^4.3.2",
     "glslify-loader": "^2.0.0",

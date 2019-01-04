@@ -1,21 +1,26 @@
 import { vec3, mat4 } from 'gl-matrix';
 import { hsv2rgb } from '../../utils/hsv2rgb';
 // const noiseVert = require('../glsl/test.glsl');
+import { snoise as noise3d } from '../../utils/noise3d';
+import { snoise2d as noise2d } from '../../utils/noise';
 
 const DEFAULT_COLOR = vec3.set(vec3.create(), 0, 0, 0);
-const POINT_AMOUNT = 1e4;
+const POINT_AMOUNT = 36 * 1e4;
 const VERT_SIZE = 4 * (4 + 4 + 3);
 
 export = function (regl) {
 
-    const pointBuffer = regl.buffer(Array(POINT_AMOUNT).fill(0).map(() => {
+    const pointBuffer = regl.buffer(Array(POINT_AMOUNT).fill(0).map((item, index) => {
         const color = hsv2rgb(Math.random() * 360, 0.6, 1);
+        const x = Math.random() * 10;
+        const z = Math.random() * 10;
+        const y = noise2d(x, z);
         return [
             // freq
-            Math.random() * 10,
-            Math.random() * 10,
-            Math.random() * 10,
-            Math.random() * 10,
+            x, //x
+            y * .1, //y
+            z, //z
+            (Math.random() * .5 + .3) * 2,
             // phase
             2.0 * Math.PI * Math.random(),
             2.0 * Math.PI * Math.random(),
@@ -45,8 +50,10 @@ export = function (regl) {
         uniform mat4 view, projection;
         varying vec3 fragColor;
         void main() {
-            vec3 position = .5 * cos(freq.xyz * time + phase.xyz) + vec3(.5);
+            // vec3 position = .5 * cos(freq.xyz * time + phase.xyz) + vec3(.5);
+            vec3 position = freq.xyz / 10.;
             gl_PointSize = 5.0 * (1.0 + cos(freq.w * time + phase.w));
+            // gl_PointSize = freq.w;
             gl_Position = projection * view * vec4(position, 1);
             fragColor = color;
         }`,
@@ -70,12 +77,11 @@ export = function (regl) {
           },
 
           uniforms: {
-            // time: ({tick}) => tick * 0.001,
-            time: 0.001,
+            time: ({tick}) => tick * 0.001,
           },
 
         count: POINT_AMOUNT,
-        primitive: 'points',
+        primitive: 'points', // TODO: do not drag points but rectangles
     });
 
     return function (radius?:number, color?:vec3) {

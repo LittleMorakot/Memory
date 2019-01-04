@@ -4,16 +4,18 @@ import { GLState } from './state/state';
 import { GameState } from '../state';
 
 import glDebugBox = require('./debug/box');
-import glDebugTriangle = require('./debug/triangle');
+import glDebug2d = require('./debug/2d');
 import glDebugPoint = require('./debug/point');
+import glStylePoint = require('./debug/stylePoint');
 import glDebugNoisePoint = require('./debug/noisePoint');
 import glSky = require('./skybox');
 
 export = function (regl, loader:REGLLoader) {
     const drawDebugBox = loader.require(glDebugBox);
-    const drawDebugTriangle = loader.require(glDebugTriangle);
+    const drawDebug2d = loader.require(glDebug2d);
     const drawDebugPoint = loader.require(glDebugPoint);
     const drawDebugNoisePoint = loader.require(glDebugNoisePoint);
+    const drawStylePoint = loader.require(glStylePoint);
     const drawSky = loader.require(glSky);
 
     const modelMatrix = mat4.identity(mat4.create());
@@ -41,18 +43,20 @@ export = function (regl, loader:REGLLoader) {
                 depth: 1,
             });
             drawSky.sky();
-            // drawDebugTriangle();
-            drawDebugBox({
-                bounds: [[0, 0, 0], [1, 1, 1]],
-                color: [1, .2, .2],
-            });
+            // drawDebug2d();
+            // drawDebugBox({
+            //     bounds: [[0, 0, 0], [1, 1, 1]],
+            //     color: [1, .2, .2],
+            // });
 
-            drawDebugPoint(vec3.fromValues(0, 0, 0), undefined, vec3.fromValues(0, 0, 0));
-            drawDebugPoint(vec3.fromValues(1, 0, 0), undefined, vec3.fromValues(1, 0, 0));
-            drawDebugPoint(vec3.fromValues(0, 1, 0), undefined, vec3.fromValues(0, 1, 0));
-            drawDebugPoint(vec3.fromValues(0, 0, 1), undefined, vec3.fromValues(0, 0, 1));
+            // drawDebugPoint(vec3.fromValues(0, 0, 0), undefined, vec3.fromValues(0, 0, 0));
+            // drawDebugPoint(vec3.fromValues(1, 0, 0), undefined, vec3.fromValues(1, 0, 0));
+            // drawDebugPoint(vec3.fromValues(0, 1, 0), undefined, vec3.fromValues(0, 1, 0));
+            // drawDebugPoint(vec3.fromValues(0, 0, 1), undefined, vec3.fromValues(0, 0, 1));
 
-            drawDebugNoisePoint();
+            // drawDebugNoisePoint();
+
+            drawStylePoint(vec3.fromValues(0, 0, 0));
         });
     }
 
