@@ -50,38 +50,36 @@ export = function (regl) {
         uniform mat4 view, projection;
         varying vec3 fragColor;
         void main() {
-            // vec3 position = .5 * cos(freq.xyz * time + phase.xyz) + vec3(.5);
             vec3 position = freq.xyz / 10.;
             gl_PointSize = 5.0 * (1.0 + cos(freq.w * time + phase.w));
-            // gl_PointSize = freq.w;
             gl_Position = projection * view * vec4(position, 1);
             fragColor = color;
         }`,
 
         attributes: {
             freq: {
-              buffer: pointBuffer,
-              stride: VERT_SIZE,
-              offset: 0,
+                buffer: pointBuffer,
+                stride: VERT_SIZE,
+                offset: 0,
             },
             phase: {
-              buffer: pointBuffer,
-              stride: VERT_SIZE,
-              offset: 16,
+                buffer: pointBuffer,
+                stride: VERT_SIZE,
+                offset: 16,
             },
             color: {
-              buffer: pointBuffer,
-              stride: VERT_SIZE,
-              offset: 32,
+                buffer: pointBuffer,
+                stride: VERT_SIZE,
+                offset: 32,
             },
-          },
+        },
 
-          uniforms: {
+        uniforms: {
             time: ({tick}) => tick * 0.001,
-          },
+        },
 
         count: POINT_AMOUNT,
-        primitive: 'points', // TODO: do not drag points but rectangles
+        primitive: 'points',
     });
 
     return function (radius?:number, color?:vec3) {
